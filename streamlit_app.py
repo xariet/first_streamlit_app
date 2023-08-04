@@ -57,7 +57,7 @@ def get_fruit_load_list():
 # Function to insert a new fruit into the fruit_load_list table in Snowflake
 def insert_row_snowflake(new_fruit):
   with my_cnx.cursor() as my_cur:
-    my_cur.execute(f"insert into fruit_load_list values ('{new_fruit}')")
+    my_cur.execute(f"insert into fruit_load_list values ('"+ {new_fruit} +"')")
     return "Thanks for adding " + new_fruit
 
 # Allow the end user to enter fruit to the list
