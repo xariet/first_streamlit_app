@@ -44,17 +44,10 @@ try:
     streamlit.dataframe(back_from_function)
 
     
-
+streamlit.write('The user entered ', fruit_choice)
 
 
 #import requests
-#fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
-
-# write your own comment -what does the next line do? 
-
-# write your own comment - what does this do?
-#streamlit.dataframe(fruityvice_normalized)
-
 
 
 #import snowflake.connector
@@ -63,7 +56,7 @@ streamlit.header("The fruit Load List contains:")
 #Snowflake related functions
 def get_fruit_load_list():
   with my_cnx.cursor() as my_cur:
-    my_cur.execute("select * from fruit_load_list"):
+    my_cur.execute("select * from fruit_load_list")
     return my_cur.fetchall()
 
 #Add a button to load the fruit
@@ -74,8 +67,20 @@ if streamlit.button('Get fruit load list'):
 
 streamlit.stop()
 
-add_my_fruit= streamlit.text_input('What fruit would you like to add','Jackfruit')
-my_cur.execute("insert into fruit_load_list values ('" + add_my_fruit + "')")
+#allow the end user to enter fruit to the list
+
+def insert_row_snowflake(new_fruit):
+  with my_cnx.cursor() as my_cur:
+    my_cur.execute("insert into fruit_load_list values ('from streamlit')")
+    return "Thanks for adding" + new_fruit
+
+
+add_my_fruit= streamlit.text_input('What fruit would you like to add')
+if streamlit.button('Add a fruit to the List'):
+    my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+    back_from_function=insert_row_snowflake(add_my_fruit)
+    streamlit.text(back_from_function)
+  
 streamlit.write('Thanks for adding', add_my_fruit)
 
-my_cur.execute("insert into fruit_load_list values ('from streamlit')")
+
